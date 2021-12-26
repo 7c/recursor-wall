@@ -38,20 +38,33 @@
     var socket = io.connect('', { path: '/socket.io' })
     socket.on('welcome',function() {
       console.log(`welcome message`)
+      blockHost('birtane.com')
     })
+
+    // once we got a query this will be called
     socket.on('query',function(data) {
+      // add row to datatable
       console.log(`query:`,data)
     })
+
     socket.on('connect', function () {
       console.log(`socket.io-client:connect`)
       socket.emit('auth',{secret:'test'})
-    });
-    socket.on('event', function (data) {
-      console.log(`socket.io-client:event`, data)
-    });
+      // socket.emit('auth',{})
+    })
+
+
     socket.on('disconnect', function () {
       console.log(`socket.io-client:disconnect`)
-    });
+    })
+
+    function blockHost(host) {
+      socket.emit('block',host,()=>{
+        console.log(`${host} is blocked`)
+      })
+    }
+
+    
   </script>
 
 </body>

@@ -10,7 +10,7 @@ const package = require('./../package.json')
 const { api_ping } = require('./api/ping')
 const middleware_logging = require('./api/middleware/logging.js');
 const setupIOServer = require('./inc/socketio-server');
-const { import_or_create_token } = require('./inc/shared')
+const { import_or_create_token, redis_client } = require('./inc/shared')
 const redis = require("redis")
 
 // app.set('view engine', 'ejs')
@@ -23,6 +23,7 @@ app.use('/', express.static('static'))
 
 // api endpoints
 app.get('(/api)?/ping', api_ping)
+
 
 function subscribeRedis(config) {
     return new Promise(async function (resolve, reject) {
@@ -55,6 +56,7 @@ async function bootstrap() {
     try {
         config = await getConfig()
         await subscribeRedis(config)
+        vars.redis_client = await redis_client(config)
         // start apiserver --port can modify the port
         var apiserver_port = argv.port ? argv.port : config.apiserver.port
         var server = app.listen(apiserver_port, config.apiserver.ip, async function () {
