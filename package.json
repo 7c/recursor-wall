@@ -1,6 +1,6 @@
 {
   "name": "recursor-wall",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a small toolchain and proof-of-concept how to use pdns-recursor as dns firewall with redis backend",
   "main": "index.js",
   "scripts": {
